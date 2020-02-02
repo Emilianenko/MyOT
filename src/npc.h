@@ -197,7 +197,7 @@ class Npc final : public Creature
 
 		std::map<std::string, std::string> parameters;
 
-		std::set<Player*> spectators;
+		std::set<Player*> list;
 
 		std::string name;
 		std::string filename;
