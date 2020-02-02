@@ -288,7 +288,7 @@ void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position
 			Player* player = creature->getPlayer();
 
 			// if player is now in range, add to spectators list, otherwise erase
-			if (player->canSee(position)) {
+			if (player->canSee(_position)) {
 				spectators.insert(player);
 			}
 			else {
