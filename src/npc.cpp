@@ -251,7 +251,7 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 			npcEventHandler->onCreatureAppear(creature);
 		}
 
-		spectators.insert(player);
+		list.insert(player);
 		updateIdleStatus();
 	}
 }
@@ -269,7 +269,7 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 			npcEventHandler->onCreatureDisappear(creature);
 		}
 
-		spectators.erase(player);
+		list.erase(player);
 		updateIdleStatus();
 	}
 }
@@ -289,10 +289,10 @@ void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position
 
 			// if player is now in range, add to spectators list, otherwise erase
 			if (player->canSee(_position)) {
-				spectators.insert(player);
+				list.insert(player);
 			}
 			else {
-				spectators.erase(player);
+				list.erase(player);
 			}
 
 			updateIdleStatus();
@@ -377,7 +377,7 @@ void Npc::setIdle(bool idle)
 
 void Npc::updateIdleStatus()
 {
-	bool status = spectators.empty();
+	bool status = list.empty();
 	if (status != isIdle) {
 		setIdle(status);
 	}
