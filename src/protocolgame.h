@@ -109,6 +109,9 @@ class ProtocolGame final : public Protocol
 		void parseAttack(NetworkMessage& msg);
 		void parseFollow(NetworkMessage& msg);
 
+		void parseProcessRuleViolationReport(NetworkMessage& msg);
+		void parseCloseRuleViolationReport(NetworkMessage& msg);
+
 		void parseBugReport(NetworkMessage& msg);
 		void parseDebugAssert(NetworkMessage& msg);
 
@@ -201,6 +204,12 @@ class ProtocolGame final : public Protocol
 		void sendWorldLight(const LightInfo& lightInfo);
 
 		void sendCreatureSquare(const Creature* creature, SquareColor_t color);
+
+		//rule violations
+		void sendRemoveRuleViolationReport(const std::string& name);
+		void sendLockRuleViolation();
+		void sendRuleViolationCancel(const std::string& name);
+		void sendRuleViolationsChannel(uint16_t channelId);
 
 		//tiles
 		void sendMapDescription(const Position& pos);
