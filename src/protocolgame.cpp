@@ -419,6 +419,9 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x98: parseOpenChannel(msg); break;
 		case 0x99: parseCloseChannel(msg); break;
 		case 0x9A: parseOpenPrivateChannel(msg); break;
+		case 0x9B: parseProcessRuleViolationReport(msg); break;
+		case 0x9C: parseCloseRuleViolationReport(msg); break;
+		case 0x9D: addGameTask(&Game::playerCancelRuleViolationReport, player->getID()); break;
 		case 0xA0: parseFightModes(msg); break;
 		case 0xA1: parseAttack(msg); break;
 		case 0xA2: parseFollow(msg); break;
@@ -869,6 +872,18 @@ void ProtocolGame::parseFollow(NetworkMessage& msg)
 	addGameTask(&Game::playerFollowCreature, player->getID(), creatureId);
 }
 
+void ProtocolGame::parseProcessRuleViolationReport(NetworkMessage& msg)
+{
+	const std::string reporter = msg.getString();
+	addGameTask(&Game::playerProcessRuleViolationReport, player->getID(), reporter);
+}
+
+void ProtocolGame::parseCloseRuleViolationReport(NetworkMessage& msg)
+{
+	const std::string reporter = msg.getString();
+	addGameTask(&Game::playerCloseRuleViolationReport, player->getID(), reporter);
+}
+
 void ProtocolGame::parseTextWindow(NetworkMessage& msg)
 {
 	uint32_t windowTextId = msg.get<uint32_t>();
@@ -1051,6 +1066,52 @@ void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t co
 	msg.addByte(0x86);
 	msg.add<uint32_t>(creature->getID());
 	msg.addByte(color);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendRemoveRuleViolationReport(const std::string& name)
+{
+	NetworkMessage msg;
+	msg.addByte(0xAF);
+	msg.addString(name);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendLockRuleViolation()
+{
+	NetworkMessage msg;
+	msg.addByte(0xB1);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendRuleViolationCancel(const std::string& name)
+{
+	NetworkMessage msg;
+	msg.addByte(0xB0);
+	msg.addString(name);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendRuleViolationsChannel(uint16_t channelId)
+{
+	NetworkMessage msg;
+	msg.addByte(0xAE);
+	msg.add<uint16_t>(channelId);
+	auto it = g_game.getRuleViolationReports().begin();
+	for (; it != g_game.getRuleViolationReports().end(); ++it) {
+		const RuleViolation& rvr = it->second;
+		if (rvr.pending) {
+			Player* reporter = g_game.getPlayerByID(rvr.reporterId);
+			if (reporter) {
+				msg.addByte(0xAA);
+				msg.add<uint32_t>(0);
+				msg.addString(reporter->getName());
+				msg.addByte(TALKTYPE_RVR_CHANNEL);
+				msg.add<uint32_t>(0);
+				msg.addString(rvr.text);
+			}
+		}
+	}
 	writeToOutputBuffer(msg);
 }
 
