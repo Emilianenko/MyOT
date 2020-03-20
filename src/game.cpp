@@ -4472,6 +4472,54 @@ void Game::parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const st
 	}
 }
 
+void Game::closeRuleViolationReport(Player* player)
+{
+	const auto it = ruleViolations.find(player->getID());
+	if (it == ruleViolations.end()) {
+		return;
+	}
+
+	ruleViolations.erase(it);
+	player->sendLockRuleViolationReport();
+
+	ChatChannel* channel = g_chat->getChannelById(CHANNEL_RULE_REP);
+	if (channel) {
+		for (UsersMap::const_iterator ut = channel->getUsers().begin(); ut != channel->getUsers().end(); ++ut) {
+			if (ut->second) {
+				ut->second->sendRemoveRuleViolationReport(player->getName());
+			}
+		}
+	}
+}
+
+void Game::cancelRuleViolationReport(Player* player)
+{
+	const auto it = ruleViolations.find(player->getID());
+	if (it == ruleViolations.end()) {
+		return;
+	}
+
+	RuleViolation& ruleViolation = it->second;
+	Player* gamemaster = getPlayerByID(ruleViolation.gamemasterId);
+	if (!ruleViolation.pending && gamemaster) {
+		// Send to the responder
+		gamemaster->sendRuleViolationCancel(player->getName());
+	}
+
+	// Send to channel
+	ChatChannel* channel = g_chat->getChannelById(CHANNEL_RULE_REP);
+	if (channel) {
+		for (UsersMap::const_iterator ut = channel->getUsers().begin(); ut != channel->getUsers().end(); ++ut) {
+			if (ut->second) {
+				ut->second->sendRemoveRuleViolationReport(player->getName());
+			}
+		}
+	}
+
+	// Erase it
+	ruleViolations.erase(it);
+}
+
 void Game::forceAddCondition(uint32_t creatureId, Condition* condition)
 {
 	Creature* creature = getCreatureByID(creatureId);
