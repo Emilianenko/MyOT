@@ -2946,7 +2946,11 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		case TALKTYPE_CHANNEL_Y:
 		case TALKTYPE_CHANNEL_R1:
 		case TALKTYPE_CHANNEL_R2:
-			g_chat->talkToChannel(*player, type, text, channelId);
+			if (channelId == CHANNEL_RULE_REP) {
+				playerSay(playerId, 0, TALKTYPE_SAY, receiver, text);
+			} else {
+				g_chat->talkToChannel(*player, type, text, channelId);
+			}
 			break;
 
 		case TALKTYPE_BROADCAST:
