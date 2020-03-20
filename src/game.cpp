@@ -1779,7 +1779,7 @@ void Game::playerOpenChannel(uint32_t playerId, uint16_t channelId)
 	if (channel->getId() == CHANNEL_RULE_REP) {
 		player->sendRuleViolationsChannel(channel->getId());
 	} else {
-		player->sendChannel(channel->getId(), channel->getName());
+	        player->sendChannel(channel->getId(), channel->getName(), users, invitedUsers);
 	}
 }
 
