@@ -808,25 +808,26 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 
 	SpeakClasses type = static_cast<SpeakClasses>(msg.getByte());
 	switch (type) {
-		case TALKTYPE_PRIVATE:
-		case TALKTYPE_PRIVATE_RED:
-			receiver = msg.getString();
-			channelId = 0;
-			break;
+	case TALKTYPE_PRIVATE:
+	case TALKTYPE_PRIVATE_RED:
+	case TALKTYPE_RVR_ANSWER:
+		receiver = msg.getString();
+		channelId = 0;
+		break;
 
-		case TALKTYPE_CHANNEL_Y:
-		case TALKTYPE_CHANNEL_R1:
-		case TALKTYPE_CHANNEL_R2:
-			channelId = msg.get<uint16_t>();
-			break;
+	case TALKTYPE_CHANNEL_Y:
+	case TALKTYPE_CHANNEL_R1:
+	case TALKTYPE_CHANNEL_R2:
+		channelId = msg.get<uint16_t>();
+		break;
 
-		default:
-			channelId = 0;
-			break;
+	default:
+		channelId = 0;
+		break;
 	}
 
 	const std::string text = msg.getString();
-	if (text.length() > 255) {
+	if (text.length() > 255 || text.find('\n') != std::string::npos) {
 		return;
 	}
 
@@ -1410,12 +1411,17 @@ void ProtocolGame::sendPrivateMessage(const Player* speaker, SpeakClasses type, 
 	msg.addByte(0xAA);
 	static uint32_t statementId = 0;
 	msg.add<uint32_t>(++statementId);
-	if (speaker) {
-		msg.addString(speaker->getName());
-		msg.add<uint16_t>(speaker->getLevel());
+	if (type == TALKTYPE_RVR_ANSWER) {
+		msg.addString("Gamemaster");
 	} else {
-		msg.add<uint32_t>(0x00);
+		if (speaker) {
+			msg.addString(speaker->getName());
+			msg.add<uint16_t>(speaker->getLevel());
+		} else {
+			msg.add<uint32_t>(0x00);
+		}
 	}
+
 	msg.addByte(type);
 	msg.addString(text);
 	writeToOutputBuffer(msg);
