@@ -1776,7 +1776,11 @@ void Game::playerOpenChannel(uint32_t playerId, uint16_t channelId)
 		users = nullptr;
 	}
 
-	player->sendChannel(channel->getId(), channel->getName(), users, invitedUsers);
+	if (channel->getId() == CHANNEL_RULE_REP) {
+		player->sendRuleViolationsChannel(channel->getId());
+	} else {
+		player->sendChannel(channel->getId(), channel->getName());
+	}
 }
 
 void Game::playerCloseChannel(uint32_t playerId, uint16_t channelId)
@@ -2947,6 +2951,14 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 
 		case TALKTYPE_BROADCAST:
 			playerBroadcastMessage(player, text);
+			break;
+
+		case TALKTYPE_RVR_CHANNEL:
+			playerReportRuleViolationReport(player, text);
+			break;
+
+		case TALKTYPE_RVR_CONTINUE:
+			playerContinueRuleViolationReport(player, text);
 			break;
 
 		default:
@@ -4280,6 +4292,108 @@ void Game::playerEnableSharedPartyExperience(uint32_t playerId, bool sharedExpAc
 	}
 
 	party->setSharedExperience(player, sharedExpActive);
+}
+
+void Game::playerProcessRuleViolationReport(uint32_t playerId, const std::string& name)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	if (player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER) {
+		return;
+	}
+
+	Player* reporter = getPlayerByName(name);
+	if (!reporter) {
+		return;
+	}
+
+	auto it = ruleViolations.find(reporter->getID());
+	if (it == ruleViolations.end()) {
+		return;
+	}
+
+	RuleViolation& ruleViolation = it->second;
+	if (!ruleViolation.pending) {
+		return;
+	}
+
+	ruleViolation.gamemasterId = player->getID();
+	ruleViolation.pending = false;
+
+	ChatChannel* channel = g_chat->getChannelById(CHANNEL_RULE_REP);
+	if (channel) {
+		for (auto userPtr : channel->getUsers()) {
+			if (userPtr.second) {
+				userPtr.second->sendRemoveRuleViolationReport(reporter->getName());
+			}
+		}
+	}
+}
+
+void Game::playerCloseRuleViolationReport(uint32_t playerId, const std::string& name)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	Player* reporter = getPlayerByName(name);
+	if (!reporter) {
+		return;
+	}
+
+	closeRuleViolationReport(reporter);
+}
+
+void Game::playerCancelRuleViolationReport(uint32_t playerId)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	cancelRuleViolationReport(player);
+}
+
+void Game::playerReportRuleViolationReport(Player* player, const std::string& text)
+{
+	auto it = ruleViolations.find(player->getID());
+	if (it != ruleViolations.end()) {
+		player->sendCancelMessage("You already have a pending rule violation report. Close it before starting a new one.");
+		return;
+	}
+
+	RuleViolation ruleViolation = RuleViolation(player->getID(), text);
+	ruleViolations[player->getID()] = ruleViolation;
+
+	ChatChannel* channel = g_chat->getChannelById(CHANNEL_RULE_REP);
+	if (channel) {
+		for (auto userPtr : channel->getUsers()) {
+			if (userPtr.second) {
+				userPtr.second->sendToChannel(player, TALKTYPE_RVR_CHANNEL, text, CHANNEL_RULE_REP);
+			}
+		}
+	}
+}
+
+void Game::playerContinueRuleViolationReport(Player* player, const std::string& text)
+{
+	auto it = ruleViolations.find(player->getID());
+	if (it == ruleViolations.end()) {
+		return;
+	}
+
+	RuleViolation& rvr = it->second;
+	Player* toPlayer = getPlayerByID(rvr.gamemasterId);
+	if (!toPlayer) {
+		return;
+	}
+
+	toPlayer->sendCreatureSay(player, TALKTYPE_RVR_CONTINUE, text, 0);
+	player->sendTextMessage(MESSAGE_STATUS_SMALL, "Message sent to Counsellor.");
 }
 
 void Game::sendGuildMotd(uint32_t playerId)
