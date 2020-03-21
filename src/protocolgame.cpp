@@ -1368,10 +1368,10 @@ void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, 
 					msg.add<uint16_t>(speaker->getLevel());
 				}
 			} else {
-				msg.add<uint16_t>(0);
+				msg.add<uint16_t>(0x00);
 			}
 		} else {
-			msg.add<uint16_t>(0);
+			msg.add<uint16_t>(0x00);
 		}
 	}
 
@@ -1393,18 +1393,21 @@ void ProtocolGame::sendToChannel(const Creature* creature, SpeakClasses type, co
 
 	static uint32_t statementId = 0;
 	msg.add<uint32_t>(++statementId);
-	if (!creature) {
-		msg.add<uint32_t>(0x00);
+
+	if (type != TALKTYPE_RVR_ANSWER) {
+		if (!creature) {
+			msg.add<uint32_t>(0x00);
 	} else if (type == TALKTYPE_CHANNEL_R2) {
-		msg.add<uint32_t>(0x00);
-		type = TALKTYPE_CHANNEL_R1;
+			msg.add<uint32_t>(0x00);
+			type = TALKTYPE_CHANNEL_R1;
 	} else {
-		msg.addString(creature->getName());
-		//Add level only for players
-		if (const Player* speaker = creature->getPlayer()) {
-			msg.add<uint16_t>(speaker->getLevel());
+			msg.addString(creature->getName());
+			//Add level only for players
+			if (const Player* speaker = creature->getPlayer()) {
+				msg.add<uint16_t>(speaker->getLevel());
 		} else {
-			msg.add<uint16_t>(0x00);
+				msg.add<uint16_t>(0x00);
+			}
 		}
 	}
 
