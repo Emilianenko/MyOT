@@ -818,12 +818,9 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 	case TALKTYPE_CHANNEL_Y:
 	case TALKTYPE_CHANNEL_R1:
 	case TALKTYPE_CHANNEL_R2:
-	case TALKTYPE_CHANNEL_O:
 		channelId = msg.get<uint16_t>();
 		break;
-	case TALKTYPE_RVR_CHANNEL:
-		channelId = msg.get<uint32_t>();
-		break;
+
 	default:
 		channelId = 0;
 		break;
