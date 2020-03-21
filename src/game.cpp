@@ -2939,6 +2939,7 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 
 		case TALKTYPE_PRIVATE:
 		case TALKTYPE_PRIVATE_RED:
+		case TALKTYPE_RVR_ANSWER:
 			playerSpeakTo(player, type, receiver, text);
 			break;
 
