@@ -411,7 +411,7 @@ int32_t Player::getDefense() const
 	}
 
 	if (shield && shield->getDefense() >= defenseValue) {
-		defenseValue = weapon != nullptr ? shield->getDefense() + weapon->getExtraDefense() : shield->getDefense();
+		defenseValue = baseDefense + shield->getDefense() + extraDefense;
 		defenseSkill = getSkillLevel(SKILL_SHIELD);
 	}
 
@@ -832,15 +832,17 @@ void Player::sendPing()
 			client->sendPing();
 		} else {
 			hasLostConnection = true;
-			if (g_config.getBoolean(ConfigManager::STOP_ATTACK_AT_EXIT))
+			if (g_config.getBoolean(ConfigManager::STOP_ATTACK_AT_EXIT)) {
 				setAttackedCreature(nullptr);
+			}
 		}
 	}
 
 	int64_t noPongTime = timeNow - lastPong;
 	if ((hasLostConnection || noPongTime >= 7000) && attackedCreature && attackedCreature->getPlayer()) {
-		if (g_config.getBoolean(ConfigManager::STOP_ATTACK_AT_EXIT))
+		if (g_config.getBoolean(ConfigManager::STOP_ATTACK_AT_EXIT)) {
 		setAttackedCreature(nullptr);
+		}
 	}
 
 	if (noPongTime >= 60000 && canLogout()) {
@@ -2811,7 +2813,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 	return false;
 }
 
-std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uint32_t> &countMap) const
+std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const
 {
 	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
 		Item* item = inventory[i];

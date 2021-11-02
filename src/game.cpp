@@ -242,7 +242,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 				if (item && item->isMoveable()) {
 					thing = item;
 				} else {
-					thing = tile->getTopVisibleCreature(player);
+					thing = tile->getBottomVisibleCreature(player);
 				}
 				break;
 			}
@@ -760,7 +760,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 					flags |= FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
 
 					if (!tmpTile->hasFlag(TILESTATE_FLOORCHANGE)) {
-						player->setDirection(DIRECTION_NORTH);
+						player->setDirection(direction);
 						destPos.z--;
 					}
 				}
@@ -772,7 +772,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 				tmpTile = map.getTile(destPos.x, destPos.y, destPos.z + 1);
 				if (tmpTile && tmpTile->hasHeight(3)) {
 					flags |= FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
-					player->setDirection(DIRECTION_SOUTH);
+					player->setDirection(direction);
 					destPos.z++;
 				}
 			}
@@ -4173,12 +4173,12 @@ bool Game::loadExperienceStages()
 
 void Game::playerInviteToParty(uint32_t playerId, uint32_t invitedId)
 {
-	if (playerId == invitedId) {
-		return;
-	}
-
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
+		return;
+	}
+	
+	if (playerId == invitedId) {
 		return;
 	}
 
@@ -4595,6 +4595,9 @@ Guild* Game::getGuild(uint32_t id) const
 
 void Game::addGuild(Guild* guild)
 {
+  if (!guild) {
+    return;
+  }
 	guilds[guild->getId()] = guild;
 }
 

@@ -500,11 +500,9 @@ void Monster::onCreatureLeave(Creature* creature)
 
 		//update targetList
 		if (isOpponent(creature)) {
-			if (!g_config.getBoolean(ConfigManager::TELEPORT_SUMMONS)) {
-				removeTarget(creature);
-				if (targetList.empty()) {
-					updateIdleStatus();
-				}
+			removeTarget(creature);
+			if (targetList.empty()) {
+				updateIdleStatus();
 			}
 		}
 	}
@@ -751,7 +749,6 @@ void Monster::onThink(uint32_t interval)
 
 	if (!isInSpawnRange(_position)) {
 		g_game.internalTeleport(this, masterPos);
-		setIdle(true);
 	} else {
 		updateIdleStatus();
 
@@ -805,6 +802,10 @@ void Monster::doAttacking(uint32_t interval)
 
 	for (const spellBlock_t& spellBlock : mType->attackSpells) {
 		bool inRange = false;
+
+		if (attackedCreature == nullptr) {
+			break;
+		}
 
 		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
 			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {

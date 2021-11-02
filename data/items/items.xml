@@ -2,14 +2,30 @@
 <items>
 	<item id="100" name="void" />
 	<item id="101" name="earth" />
+	<item id="102" name="grass" />
 	<item id="103" name="dirt" />
 	<item id="104" name="sand" />
+	<item id="105" name="gravel" />
 	<item id="106" name="grass" />
 	<item id="107" name="rock soil" />
 	<item fromid="108" toid="109" name="flowers" />
+	<item fromid="110" toid="133" name="grass" />
+	<item fromid="134" toid="145" name="sand" />
+	<item fromid="146" toid="157" name="gravel" />
+	<item fromid="158" toid="169" name="sand" />
+	<item fromid="170" toid="181" name="gravel" />
+	<item fromid="182" toid="193" name="grass" />
 	<item id="194" name="dirt" />
+	<item fromid="195" toid="206" name="grass" />
+	<item fromid="207" toid="218" name="gravel" />
+	<item fromid="219" toid="230" name="grass" />
 	<item id="231" name="sand" />
+	<item fromid="232" toid="243" name="grass" />
+	<item fromid="244" toid="255" name="sand" />
+	<item fromid="256" toid="267" name="rock soil" />
+	<item fromid="268" toid="279" name="grass" />
 	<item id="280" name="earth ground" />
+	<item fromid="281" toid="292" name="grass" />
 	<item id="293" name="grass">
 		<attribute key="floorchange" value="down" />
 	</item>
@@ -18,6 +34,16 @@
 		<attribute key="decayTo" value="293" />
 		<attribute key="duration" value="300" />
 	</item>
+	<item fromid="295" toid="318" name="grass" />
+	<item fromid="319" toid="326" name="sand" />
+	<item fromid="327" toid="328" name="gravel" />
+	<item fromid="329" toid="334" name="mountain" />
+	<item id="335" name="sand" />
+	<item fromid="336" toid="340" name="mountain" />
+	<item id="341" name="sand" />
+	<item id="342" name="mountain" />
+	<item id="343" name="gravel" />
+	<item fromid="344" toid="350" name="mountain" />
 	<item fromid="351" toid="353" name="dirt floor" />
 	<item id="354" name="muddy floor" />
 	<item id="355" name="muddy floor">
@@ -274,6 +300,7 @@
 		<attribute key="type" value="door" />
 		<attribute key="leveldoor" value="1000" />
 		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="Only the worthy may pass." />
 	</item>
 	<item id="1228" article="a" name="gate of expertise">
 		<attribute key="type" value="door" />
@@ -282,6 +309,7 @@
 		<attribute key="type" value="door" />
 		<attribute key="leveldoor" value="1000" />
 		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="Only the worthy may pass." />
 	</item>
 	<item id="1230" article="a" name="gate of expertise">
 		<attribute key="type" value="door" />
@@ -342,6 +370,7 @@
 		<attribute key="type" value="door" />
 		<attribute key="leveldoor" value="1000" />
 		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="Only the worthy may pass." />
 	</item>
 	<item id="1246" article="a" name="gate of expertise">
 		<attribute key="type" value="door" />
@@ -350,6 +379,7 @@
 		<attribute key="type" value="door" />
 		<attribute key="leveldoor" value="1000" />
 		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="Only the worthy may pass." />
 	</item>
 	<item id="1248" article="a" name="gate of expertise">
 		<attribute key="type" value="door" />
@@ -396,6 +426,7 @@
 		<attribute key="type" value="door" />
 		<attribute key="leveldoor" value="1000" />
 		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="Only the worthy may pass." />
 	</item>
 	<item id="1260" article="a" name="gate of expertise">
 		<attribute key="type" value="door" />
@@ -404,6 +435,7 @@
 		<attribute key="type" value="door" />
 		<attribute key="leveldoor" value="1000" />
 		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="Only the worthy may pass." />
 	</item>
 	<item id="1262" article="a" name="gate of expertise">
 		<attribute key="type" value="door" />
@@ -2181,6 +2213,7 @@
 		<attribute key="decayTo" value="0" />
 		<attribute key="showduration" value="1" />
 		<attribute key="duration" value="3000" />
+		<attribute key="description" value="The wand glows."/>
 	</item>
 	<item id="2164" article="a" name="might ring">
 		<attribute key="weight" value="100" />
@@ -3242,7 +3275,6 @@
 		<attribute key="weight" value="2300" />
 		<attribute key="defense" value="20" />
 		<attribute key="attack" value="24" />
-		<attribute key="elementFire" value="11" />
 		<attribute key="weaponType" value="sword" />
 		<attribute key="extradef" value="1" />
 	</item>
@@ -3361,7 +3393,6 @@
 		<attribute key="attack" value="18" />
 		<attribute key="weaponType" value="sword" />
 		<attribute key="extradef" value="1" />
-		<attribute key="elementEarth" value="8" />
 	</item>
 	<item id="2410" article="a" name="throwing knife" plural="throwing knives">
 		<attribute key="weight" value="500" />
@@ -3374,7 +3405,6 @@
 		<attribute key="weight" value="880" />
 		<attribute key="defense" value="8" />
 		<attribute key="attack" value="18" />
-		<attribute key="elementEarth" value="2" />
 		<attribute key="weaponType" value="sword" />
 	</item>
 	<item id="2412" article="a" name="katana">
@@ -3522,7 +3552,6 @@
 		<attribute key="weight" value="4000" />
 		<attribute key="defense" value="16" />
 		<attribute key="attack" value="27" />
-		<attribute key="elementFire" value="11" />
 		<attribute key="weaponType" value="axe" />
 		<attribute key="extradef" value="1" />
 	</item>
@@ -6729,8 +6758,16 @@
 	<item fromid="3224" toid="3225" name="wooden floor" />
 	<item fromid="3226" toid="3241" article="a" name="broken stone tile" />
 	<item fromid="3242" toid="3245" name="wooden floor" />
-	<item id="3263" name="jungle grass" />
+	<item fromid="3246" toid="3257" name="gravel" />
+	<item id="3258" name="water">
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="allowpickupable" value="1" />
+	</item>
+	<item fromid="3259" toid="3263" name="jungle grass" />
 	<item fromid="3264" toid="3265" name="earth" />
+	<item fromid="3266" toid="3281" name="jungle grass" />
+	<item fromid="3282" toid="3297" name="grass" />
 	<item fromid="3298" toid="3309" name="jungle grass" />
 	<item id="3310" article="a" name="mud stain">
 		<attribute key="floorchange" value="down" />
@@ -6854,15 +6891,7 @@
 		<attribute key="type" value="door" />
 	</item>
 	<item fromid="3569" toid="3574" article="a" name="waterfall" />
-	<item id="3587" article="a" name="small boat" />
-	<item fromid="3588" toid="3590" article="a" name="small boat">
-		<attribute key="type" value="teleport" />
-	</item>
-	<item fromid="3591" toid="3592" article="a" name="small boat" />
-	<item fromid="3593" toid="3595" article="a" name="small boat">
-		<attribute key="type" value="teleport" />
-	</item>
-	<item id="3596" article="a" name="small boat" />
+	<item fromid="3587" toid="3596" article="a" name="small boat" />
 	<item fromid="3597" toid="3598" article="a" name="small sail" />
 	<item fromid="3599" toid="3600" article="a" name="paddle" />
 	<item fromid="3601" toid="3602" article="a" name="mast" />
@@ -8006,6 +8035,10 @@
 		<attribute key="effect" value="greenbubble" />
 		<attribute key="allowpickupable" value="1" />
 	</item>
+	<item id="4756" name="grass" />
+	<item id="4757" name="rock soil" />
+	<item id="4758" name="swamp" />
+	<item id="4759" name="gravel" />
 	<item fromid="4760" toid="4783" name="sand" />
 	<item fromid="4784" toid="4795" name="grass" />
 	<item fromid="4796" toid="4819" name="dirt" />
