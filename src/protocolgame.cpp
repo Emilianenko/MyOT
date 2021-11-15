@@ -1357,22 +1357,13 @@ void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, 
 	static uint32_t statementId = 0;
 	msg.add<uint32_t>(++statementId);
 
-	if (type != TALKTYPE_RVR_ANSWER) {
-		if (type != TALKTYPE_CHANNEL_R2) {
-			if (creature) {
+	msg.addString(creature->getName());
 
-				msg.addString(creature->getName());
-
-				//Add level only for players
-				if (const Player* speaker = creature->getPlayer()) {
-					msg.add<uint16_t>(speaker->getLevel());
-				}
-			} else {
-				msg.add<uint16_t>(0x00);
-			}
-		} else {
-			msg.add<uint16_t>(0x00);
-		}
+	//Add level only for players
+	if (const Player* speaker = creature->getPlayer()) {
+		msg.add<uint16_t>(speaker->getLevel());
+	} else {
+		msg.add<uint16_t>(0x00);
 	}
 
 	msg.addByte(type);
