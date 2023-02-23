@@ -99,6 +99,11 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			disconnectClient("You may only login with one character\nof your account at the same time.");
 			return;
 		}
+		
+		if (player->getWorldId() != g_config.getNumber(ConfigManager::WORLD_ID)) {
+			disconnectClient("Incorrect world, please try relogin.");
+			return;
+		}
 
 		if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
 			BanInfo banInfo;
