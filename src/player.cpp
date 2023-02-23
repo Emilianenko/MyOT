@@ -121,6 +121,8 @@ Player::Player(ProtocolGame_ptr p) :
 
 	accountType = ACCOUNT_TYPE_NORMAL;
 	premiumDays = 0;
+		
+	worldId = 0;
 
 	idleTime = 0;
 
@@ -3037,8 +3039,7 @@ void Player::doAttacking(uint32_t)
 		SchedulerTask* task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay), std::bind(&Game::checkCreatureAttack, &g_game, getID()));
 		if (!classicSpeed) {
 			setNextActionTask(task);
-		}
-		else {
+		} else {
 			g_scheduler.addEvent(task);
 		}
 
