@@ -359,6 +359,9 @@ class Player final : public Creature, public Cylinder
 		AccountType_t getAccountType() const {
 			return accountType;
 		}
+		uint16_t getWorldId() const {
+			return worldId;
+		}
 		uint32_t getLevel() const {
 			return level;
 		}
@@ -1099,6 +1102,7 @@ class Player final : public Creature, public Cylinder
 		uint16_t staminaMinutes;
 		uint16_t maxWriteLen;
 		int16_t lastDepotId;
+		int16_t worldId;
 
 		uint8_t soul;
 		uint8_t blessings;
