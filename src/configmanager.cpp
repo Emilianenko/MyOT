@@ -64,7 +64,9 @@ bool ConfigManager::load()
 		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
 		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "forgottenserver");
 		string[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", "");
+		string[MYSQL_WORLD_DB] = getGlobalString(L, "mysqlWorldDatabase", "forgottenserver");
 
+		integer[WORLD_ID] = getGlobalNumber(L, "worldID", 1);
 		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
 		integer[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
 		integer[LOGIN_PORT] = getGlobalNumber(L, "loginProtocolPort", 7171);
@@ -85,6 +87,7 @@ bool ConfigManager::load()
 	boolean[EMOTE_SPELLS] = getGlobalBoolean(L, "emoteSpells", false);
 	boolean[STAMINA_SYSTEM] = getGlobalBoolean(L, "staminaSystem", true);
 	boolean[WARN_UNSAFE_SCRIPTS] = getGlobalBoolean(L, "warnUnsafeScripts", true);
+	boolean[IS_PREVIEWER] = getGlobalBoolean(L, "isPreviewer", false);
 	boolean[CONVERT_UNSAFE_SCRIPTS] = getGlobalBoolean(L, "convertUnsafeScripts", true);
 	boolean[CLASSIC_EQUIPMENT_SLOTS] = getGlobalBoolean(L, "classicEquipmentSlots", false);
 	boolean[HOUSE_ANTI_TRASH] = getGlobalBoolean(L, "houseAntiTrash", false);
