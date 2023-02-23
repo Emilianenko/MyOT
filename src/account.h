@@ -24,6 +24,7 @@
 
 struct Account {
 	std::vector<std::string> characters;
+	std::vector<uint16_t> world;
 	uint32_t name;
 	time_t lastDay;
 	uint32_t id;
@@ -31,6 +32,23 @@ struct Account {
 	AccountType_t accountType;
 
 	Account() : lastDay(0), id(0), premiumDays(0), accountType(ACCOUNT_TYPE_NORMAL) {}
+};
+
+struct World {
+	std::vector<uint16_t> id;
+	std::vector<std::string> name;
+	std::vector<std::string> ip;
+	std::vector<uint16_t> port;
+	std::vector<uint16_t> previewer;
+
+	World() : id(0), ip(0), port(0), previewer(0) {}
+};
+
+struct Playerson {
+	std::vector<uint32_t> id;
+	std::vector<uint16_t> world;
+
+	Playerson() : id(0), world(0) {}
 };
 
 #endif
