@@ -188,7 +188,7 @@ class Game
 		  * \param acc is the account identifier
 		  * \returns A Pointer to the player
 		  */
-		Player* getPlayerByAccount(uint32_t acc);
+		bool getPlayerByAccount(uint32_t acc);
 
 		/* Place Creature on the map without sending out events to the surrounding.
 		  * \param creature Creature to place on the map
