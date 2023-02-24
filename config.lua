@@ -26,6 +26,7 @@ maxPlayers = 100
 motd = "Welcome to Forgotten Server."
 onePlayerOnlinePerAccount = true
 allowClones = false
+isPreviewer = false
 teleportSummons = false
 serverName = "Forgotten"
 statusTimeout = 50000
@@ -55,10 +56,12 @@ mapName = "test"
 mapAuthor = "Yurez"
 
 -- MySQL
+worldID = 1
 mysqlHost = "127.0.0.1"
 mysqlUser = "root"
 mysqlPass = "1111111"
 mysqlDatabase = "yourdatabase"
+mysqlWorldDatabase = "server"
 mysqlPort = 3306
 mysqlSock = ""
 
