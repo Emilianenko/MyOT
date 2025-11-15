@@ -1801,6 +1801,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::STAIRHOP_DELAY)
 	registerEnumIn("configKeys", ConfigManager::EXP_FROM_PLAYERS_LEVEL_RANGE)
 	registerEnumIn("configKeys", ConfigManager::MAX_PACKETS_PER_SECOND)
+	registerEnumIn("configKeys", ConfigManager::PLAYER_CONSOLE_LOGS)
 
 	// os
 	registerMethod("os", "mtime", LuaScriptInterface::luaSystemTime);
@@ -2007,7 +2008,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "isRemoved", LuaScriptInterface::luaCreatureIsRemoved);
 	registerMethod("Creature", "isCreature", LuaScriptInterface::luaCreatureIsCreature);
 	registerMethod("Creature", "isInGhostMode", LuaScriptInterface::luaCreatureIsInGhostMode);
-	registerMethod("Creature", "isHealthHidden", LuaScriptInterface::luaCreatureIsHealthHidden);
 
 	registerMethod("Creature", "canSee", LuaScriptInterface::luaCreatureCanSee);
 	registerMethod("Creature", "canSeeCreature", LuaScriptInterface::luaCreatureCanSeeCreature);
@@ -2044,6 +2044,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "addHealth", LuaScriptInterface::luaCreatureAddHealth);
 	registerMethod("Creature", "getMaxHealth", LuaScriptInterface::luaCreatureGetMaxHealth);
 	registerMethod("Creature", "setMaxHealth", LuaScriptInterface::luaCreatureSetMaxHealth);
+	
+	registerMethod("Creature", "isHealthHidden", LuaScriptInterface::luaCreatureIsHealthHidden);
 	registerMethod("Creature", "setHiddenHealth", LuaScriptInterface::luaCreatureSetHiddenHealth);
 
 	registerMethod("Creature", "getMana", LuaScriptInterface::luaCreatureGetMana);
@@ -6415,18 +6417,6 @@ int LuaScriptInterface::luaCreatureIsInGhostMode(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaCreatureIsHealthHidden(lua_State* L)
-{
-	// creature:isHealthHidden()
-	const Creature* creature = getUserdata<const Creature>(L, 1);
-	if (creature) {
-		pushBoolean(L, creature->isHealthHidden());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int LuaScriptInterface::luaCreatureCanSee(lua_State* L)
 {
 	// creature:canSee(position)
@@ -6808,6 +6798,18 @@ int LuaScriptInterface::luaCreatureSetMaxHealth(lua_State* L)
 		player->sendStats();
 	}
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureIsHealthHidden(lua_State* L)
+{
+	// creature:isHealthHidden()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->isHealthHidden());
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
@@ -7348,8 +7350,7 @@ int LuaScriptInterface::luaPlayerGetDepotLocker(lua_State* L)
 	if (depotLocker) {
 		pushUserdata<Item>(L, depotLocker);
 		setItemMetatable(L, -1, depotLocker);
-	}
-	else {
+	} else {
 		pushBoolean(L, false);
 	}
 	return 1;
